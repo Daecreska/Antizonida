@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
 
     <style>
-        /* --- ОБЩИЕ СТИЛИ И ПЕРЕМЕННЫЕ --- */
+        /* --- ОБЩИЕ СТИЛИ И НОВАЯ ЦВЕТОВАЯ ГАММА --- */
         :root {
             --font-family: 'Montserrat', sans-serif;
             --text-color: #ffffff;
@@ -17,7 +17,8 @@
             --dark-bg: #121212;
             --section-bg: #1a1a1a;
             --header-bg: rgba(18, 18, 18, 0.7);
-            --primary-gradient: linear-gradient(90deg, #FF4B4B, #F42A7F);
+            /* ИЗМЕНЕНИЕ: Новый основной градиент */
+            --primary-gradient: linear-gradient(90deg, #00C6FF, #0072FF);
             --input-bg: #2c2c2e;
         }
 
@@ -80,9 +81,10 @@
             height: 40px;
             background-color: rgba(255, 255, 255, 0.2);
         }
+        /* ИЗМЕНЕНИЕ: Цвет подсветки курсора */
         body.cursor-hover .cursor-outline {
             transform: translate(-50%, -50%) scale(1.5);
-            background-color: rgba(255, 75, 75, 0.3);
+            background-color: rgba(0, 114, 255, 0.3);
         }
         
         /* --- ПОДСВЕТКА ЗА КУРСОРОМ (SPOTLIGHT) --- */
@@ -94,7 +96,7 @@
             height: 100%;
             pointer-events: none;
             z-index: -1;
-            background: radial-gradient(circle at 50% 50%, rgba(42, 141, 255, 0.1), transparent 25%);
+            background: radial-gradient(circle at 50% 50%, rgba(0, 114, 255, 0.08), transparent 25%);
         }
 
         /* --- ШАПКА (HEADER) --- */
@@ -120,6 +122,11 @@
             display: flex;
             align-items: center;
             gap: 30px;
+        }
+
+        .logo img {
+            height: 48px;
+            width: auto;
         }
         
         .main-nav ul {
@@ -233,8 +240,8 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            max-height: 200px;
-            overflow-y: auto;
+            max-height: 250px;
+            overflow-y: hidden;
         }
         .live-feed-item {
             background-color: var(--input-bg);
@@ -245,10 +252,11 @@
             gap: 15px;
             animation: fadeIn 0.5s ease-out;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         .live-feed-item .icon { font-size: 1.5rem; }
-        .live-feed-item p .player { font-weight: 700; color: #FF4B4B; }
-        .live-feed-item p .item { font-weight: 700; color: #2A8DFF; }
+        /* ИЗМЕНЕНИЕ: Цвет ника игрока */
+        .live-feed-item p .player { font-weight: 700; color: #00C6FF; }
+        .live-feed-item p .item { font-weight: 700; color: #0072FF; }
 
         /* --- СЕКЦИЯ НОВОСТЕЙ ("WEAZEL NEWS") --- */
         .news-section {
@@ -374,7 +382,6 @@
         }
         .map-container {
             flex: 3;
-            background: url('https://i.imgur.com/8Z4a5Yg.jpeg') no-repeat center center;
             background-size: cover;
             border-radius: 12px;
             min-height: 500px;
@@ -436,7 +443,7 @@
         .fame-list .player-value { color: var(--text-secondary-color); }
 
 
-        /* --- БЛОК: ГОРИЗОНТАЛЬНЫЙ СКРОЛЛ --- */
+        /* --- БЛОК: "Вселенная AntiZona RP" --- */
         .horizontal-scroll-section {
             padding: 100px 0;
             overflow: hidden;
@@ -453,11 +460,12 @@
             display: flex;
             gap: 30px;
             padding: 20px;
-            width: max-content;
+            justify-content: center;
+            flex-wrap: wrap;
         }
         
         .feature-card {
-            width: 400px;
+            width: 350px;
             flex-shrink: 0;
             background: var(--section-bg);
             border-radius: 16px;
@@ -504,7 +512,8 @@
             top: -1px; left: -1px;
             width: calc(100% + 2px);
             height: calc(100% + 2px);
-            background: linear-gradient(120deg, #F42A7F, #2A8DFF, #F42A7F);
+            /* ИЗМЕНЕНИЕ: Цвет анимированной рамки */
+            background: linear-gradient(120deg, #0072FF, #00C6FF, #0072FF);
             background-size: 200% 200%;
             z-index: -1;
             border-radius: 25px;
@@ -521,7 +530,7 @@
         .requirements h3 { font-size: 2rem; margin-bottom: 30px; }
         .tabs { display: flex; gap: 10px; margin-bottom: 30px; }
         .tab-button { background-color: #333; color: var(--text-secondary-color); padding: 10px 20px; border: none; border-radius: 8px; font-weight: 700; transition: all 0.2s ease; }
-        .tab-button.active { background-color: #fff; color: #111; }
+        .tab-button.active { background: var(--primary-gradient); color: var(--text-color); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .requirements-list li { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #333; font-size: 1rem; }
@@ -546,12 +555,12 @@
         .form-group label { display: block; font-size: 0.9rem; color: var(--text-secondary-color); margin-bottom: 8px; }
         .form-group .input-wrapper { position: relative; }
         .form-group input, .form-group select { width: 100%; padding: 15px; background-color: var(--input-bg); border: 1px solid #333; border-radius: 8px; color: var(--text-color); font-size: 1rem; font-family: var(--font-family); transition: border-color 0.2s ease; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: #555; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #0072FF; }
         .form-group .password-toggle { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-secondary-color); }
         .form-group select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23aeb1b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 15px center; background-size: 1em; padding-right: 40px; }
         .auth-modal .forgot-password { text-align: center; margin-top: 20px; font-size: 0.9rem; color: var(--text-secondary-color); transition: color 0.2s ease; }
         .auth-modal .forgot-password:hover { color: var(--text-color); }
-        .btn-rainbow { width: 100%; padding: 18px; font-size: 1.1rem; font-weight: 700; color: white; border: none; border-radius: 8px; background: linear-gradient(90deg, #ff2a2a, #ff7b2a, #f2ff2a, #2aff5e, #2a99ff, #692aff, #ff2aed, #ff2a2a); background-size: 400% 400%; animation: rainbow-animation 8s ease infinite; }
+        .btn-rainbow { width: 100%; padding: 18px; font-size: 1.1rem; font-weight: 700; color: white; border: none; border-radius: 8px; /* ИЗМЕНЕНИЕ: Новый градиент для кнопки */ background: linear-gradient(90deg, #0072FF, #00C6FF, #A020F0, #0072FF); background-size: 400% 400%; animation: rainbow-animation 8s ease infinite; }
         
         @keyframes rainbow-animation {
             0% { background-position: 0% 50%; }
@@ -628,7 +637,7 @@
         <div class="container">
             <div class="header-left">
                 <a href="#hero" class="logo">
-                    <svg width="48" height="48" viewBox="0 0 132 132" fill="none" xmlns="http://www.w3.org/2000/svg"><g filter="url(#filter0_d_1_2)"><path d="M65.9999 0C82.8939 0 99.1179 6.95356 111.014 18.8492C122.91 30.7449 129.864 46.9689 129.864 63.8629C129.864 80.7569 122.91 96.9809 111.014 108.877C99.1179 120.772 82.8939 127.726 65.9999 127.726C49.1059 127.726 32.8819 120.772 20.9862 108.877C9.09051 96.9809 2.13695 80.7569 2.13695 63.8629C2.13695 46.9689 9.09051 30.7449 20.9862 18.8492C32.8819 6.95356 49.1059 0 65.9999 0Z" fill="url(#paint0_linear_1_2)"/><path d="M57.7371 90.137L31.1371 37.637H39.8371L61.6371 78.437L63.5371 78.437L85.2371 37.637H93.9371L67.3371 90.137H57.7371Z" fill="white"/></g><defs><filter id="filter0_d_1_2" x="0.136948" y="0" width="131.727" height="131.726" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/><feOffset dy="2"/><feGaussianBlur stdDeviation="1"/><feComposite in2="hardAlpha" operator="out"/><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/><feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_2"/><feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_2" result="shape"/></filter><linearGradient id="paint0_linear_1_2" x1="66" y1="0" x2="66" y2="127.726" gradientUnits="userSpaceOnUse"><stop stop-color="#2A8DFF"/><stop offset="1" stop-color="#0064FF"/></linearGradient></defs></svg>
+                    <img style="width: 100px; height:90px;" src="{FD6F9EF4-2AC1-46DC-B5F1-9081DA32647A}(1)-Photoroom.png" alt="">
                 </a>
                 <nav class="main-nav">
                     <ul>
@@ -663,16 +672,12 @@
             </div>
         </section>
 
-        <!-- НОВАЯ СЕКЦИЯ: Лента Игровых Событий -->
+        <!-- Лента Игровых Событий -->
         <section class="live-feed-section">
             <div class="container">
                 <div class="live-feed-container reveal">
                     <h3>Прямой эфир из штата</h3>
                     <ul class="live-feed-list">
-                        <li class="live-feed-item"><span class="icon">🚗</span> <p><span class="player">John_Doe</span> только что купил автомобиль <span class="item">Infernus</span> за $1,500,000.</p></li>
-                        <li class="live-feed-item"><span class="icon">💼</span> <p>Семья <span class="player">Corleone</span> захватила новый бизнес "24/7".</p></li>
-                        <li class="live-feed-item"><span class="icon">🚓</span> <p>Полицейский департамент Las Venturas объявил в розыск <span class="player">Mike_Hawk</span>.</p></li>
-                        <li class="live-feed-item"><span class="icon">🏠</span> <p><span class="player">Jane_Smith</span> приобрела дом №228 в Vinewood.</p></li>
                     </ul>
                 </div>
             </div>
@@ -685,8 +690,8 @@
                  <h2 class="section-title reveal">Antizona Tribune <span>Новостной портал штата</span></h2>
                 <div class="news-grid">
                     <div class="news-card reveal" data-tilt>
-                        <div class="news-card-bg" style="background-image: url('https://via.placeholder.com/400x500/FF4B4B/FFFFFF?text=Рейд+ФБР');"></div>
-                        <video class="news-card-video" src="https://www.w3schools.com/howto/rain.mp4" muted loop preload="none"></video>
+                        <div class="news-card-bg" style="background-image: url('https://i.imgur.com/gA08A2z.png');"></div>
+                        <video class="news-card-video" src="FBI OPEN UP!.mp4" muted loop preload="none"></video>
                         <div class="news-card-content">
                             <p class="date">24 Сентября 2025</p>
                             <h3>Громкий рейд ФБР</h3>
@@ -694,7 +699,7 @@
                         </div>
                     </div>
                     <div class="news-card reveal" data-tilt>
-                        <div class="news-card-bg" style="background-image: url('https://via.placeholder.com/400x500/2A8DFF/FFFFFF?text=Новый+закон');"></div>
+                        <div class="news-card-bg" style="background-image: url('https://i.imgur.com/QyL8hQY.png');"></div>
                         <video class="news-card-video" src="https://www.w3schools.com/html/mov_bbb.mp4" muted loop preload="none"></video>
                         <div class="news-card-content">
                              <p class="date">22 Сентября 2025</p>
@@ -703,8 +708,8 @@
                         </div>
                     </div>
                     <div class="news-card reveal" data-tilt>
-                        <div class="news-card-bg" style="background-image: url('https://via.placeholder.com/400x500/F42A7F/FFFFFF?text=Интервью');"></div>
-                        <video class="news-card-video" src="https://www.w3schools.com/howto/rain.mp4" muted loop preload="none"></video>
+                        <div class="news-card-bg" style="background-image: url('https://i.imgur.com/Jd3f1wE.png');"></div>
+                        <video class="news-card-video" src="2.mp4" muted loop preload="none"></video>
                         <div class="news-card-content">
                             <p class="date">20 Сентября 2025</p>
                             <h3>Интервью с шефом LSPD</h3>
@@ -715,7 +720,7 @@
             </div>
         </section>
 
-        <!-- ОБНОВЛЕННАЯ СЕКЦИЯ: Динамический статус серверов -->
+        <!-- Динамический статус серверов -->
         <section class="stats-section">
             <div class="container">
                 <div class="stats-grid">
@@ -724,12 +729,12 @@
                         <p>Игроков онлайн</p>
                     </div>
                     <div class="stat-item reveal">
-                        <h3 class="text-stat">15:30, Дождь</h3>
+                        <h3 class="text-stat" id="game-time">15:30, Дождь</h3>
                         <p>Игровое время и погода</p>
                     </div>
                     <div class="stat-item reveal">
-                         <h3 class="text-stat">Gabe_Newell</h3>
-                        <p>Текущий Губернатор</p>
+                         <h3 class="text-stat">Данька и Макс</h3>
+                        <p>Текущие Губернаторы</p>
                     </div>
                      <div class="stat-item reveal">
                         <h3 class="counter" data-target="11">0</h3>
@@ -739,13 +744,13 @@
             </div>
         </section>
 
-        <!-- НОВАЯ СЕКЦИЯ: Интерактивная Live-карта -->
+        <!-- Интерактивная Live-карта -->
         <section class="live-map-section">
             <div class="container">
                 <h2 class="section-title reveal">Live-Карта Штата</h2>
                 <div class="live-map-wrapper reveal">
                     <div class="map-container">
-                       <iframe src="https://gta-5-map.com/?embed=light" height="500" style="position: relative; width: 100%;"></iframe>
+                       <iframe src="https://gta-5-map.com/?embed=dark" height="500" style="position: relative; width: 100%; border-radius: 12px;"></iframe>
                     </div>
                     <div class="map-legend">
                         <h3>Легенда карты</h3>
@@ -753,7 +758,8 @@
                             <h4>🗺️ Война за территории</h4>
                             <p>Следите за захватом территорий в реальном времени.</p>
                             <ul>
-                                <li><span class="color-box" style="background-color: #E74C3C;"></span> Grove Street</li>
+                                <!-- ИЗМЕНЕНИЕ: Цвет Grove Street -->
+                                <li><span class="color-box" style="background-color: #2ECC71;"></span> Grove Street</li>
                                 <li><span class="color-box" style="background-color: #9B59B6;"></span> Ballas</li>
                                 <li><span class="color-box" style="background-color: #3498DB;"></span> Vagos</li>
                             </ul>
@@ -771,7 +777,7 @@
             </div>
         </section>
         
-        <!-- НОВАЯ СЕКЦИЯ: Зал Славы -->
+        <!-- Зал Славы -->
         <section class="hall-of-fame-section">
             <div class="container">
                 <h2 class="section-title reveal">Зал Славы</h2>
@@ -804,7 +810,7 @@
             </div>
         </section>
 
-        <!-- ОБНОВЛЕННАЯ СЕКЦИЯ: Горизонтальный скролл с новыми фишками -->
+        <!-- Вселенная AntiZona RP -->
         <section class="horizontal-scroll-section" id="features">
              <h2 class="reveal">Вселенная AntiZona RP</h2>
              <div class="horizontal-container-wrapper">
@@ -887,7 +893,6 @@
         </div>
     </div>
     
-    <!-- GSAP для плавных анимаций -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
 
     <script>
@@ -904,9 +909,7 @@
         window.addEventListener('mousemove', e => {
             gsap.to(cursorDot, 0.2, {x: e.clientX, y: e.clientY});
             gsap.to(cursorOutline, 0.6, {x: e.clientX, y: e.clientY});
-            gsap.to(spotlight, 0.6, {
-                background: `radial-gradient(circle at ${e.clientX}px ${e.clientY}px, rgba(42, 141, 255, 0.1), transparent 25%)`
-            });
+            spotlight.style.background = `radial-gradient(circle at ${e.clientX}px ${e.clientY}px, rgba(0, 114, 255, 0.08), transparent 25%)`;
         });
         
         document.querySelectorAll('a, button, .news-card, .tab-button').forEach(el => {
@@ -919,7 +922,6 @@
         window.addEventListener('scroll', () => {
             const offset = window.pageYOffset;
             if (parallaxVideo) {
-                // Двигаем видео медленнее, чем скролл, для создания глубины
                 parallaxVideo.style.transform = `translate(-50%, calc(-50% + ${offset * 0.3}px))`;
             }
         });
@@ -953,21 +955,6 @@
                 });
             }
         });
-        
-        // --- 5. ЛОГИКА ДЛЯ ГОРИЗОНТАЛЬНОГО СКРОЛЛА ---
-        const scrollContainer = document.querySelector('.horizontal-container');
-        const scrollWrapper = document.querySelector('.horizontal-scroll-section');
-        if(scrollContainer && scrollWrapper) {
-            scrollWrapper.addEventListener('wheel', (evt) => {
-                // Проверяем, есть ли горизонтальный скролл
-                if (Math.abs(evt.deltaY) > Math.abs(evt.deltaX)) {
-                    if (scrollContainer.scrollWidth > scrollContainer.clientWidth) {
-                        evt.preventDefault();
-                        scrollContainer.scrollLeft += evt.deltaY;
-                    }
-                }
-            }, { passive: false });
-        }
         
         // --- 6. ЗВУКОВОЕ СОПРОВОЖДЕНИЕ ---
         const soundToggle = document.getElementById('sound-toggle');
@@ -1017,7 +1004,6 @@
         });
 
         // --- 8. Базовая логика (табы, модальное окно, анимация скролла) ---
-        // Табы
         document.querySelectorAll('.tab-button').forEach(button => {
             button.addEventListener('click', () => {
                 const parent = button.closest('.requirements');
@@ -1029,7 +1015,6 @@
             });
         });
         
-        // Модальное окно
         const openModalBtn = document.getElementById('open-modal-btn');
         const closeModalBtn = document.getElementById('close-modal-btn');
         const modalOverlay = document.getElementById('auth-modal-overlay');
@@ -1037,7 +1022,6 @@
         closeModalBtn.addEventListener('click', () => modalOverlay.classList.remove('visible'));
         modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) modalOverlay.classList.remove('visible'); });
         
-        // Анимация при прокрутке + ДИНАМИЧЕСКИЕ СЧЕТЧИКИ
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1063,6 +1047,74 @@
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.reveal, .counter').forEach(el => observer.observe(el));
+        
+        // --- ЧАСЫ ПО МОСКОВСКОМУ ВРЕМЕНИ ---
+        function updateMoscowTime() {
+            const timeElement = document.getElementById('game-time');
+            if (!timeElement) return;
+
+            const now = new Date();
+            const utc_hours = now.getUTCHours();
+            const moscow_hours = (utc_hours + 3) % 24;
+            const minutes = now.getUTCMinutes();
+            
+            const formattedHours = String(moscow_hours).padStart(2, '0');
+            const formattedMinutes = String(minutes).padStart(2, '0');
+            
+            timeElement.textContent = `${formattedHours}:${formattedMinutes}, Дождь`;
+        }
+        updateMoscowTime();
+        setInterval(updateMoscowTime, 1000);
+
+        // --- ДИНАМИЧЕСКАЯ ЛЕНТА СОБЫТИЙ ---
+        const liveFeedList = document.querySelector('.live-feed-list');
+        const feedTemplates = [
+            { icon: '🚗', message: '<p><span class="player">{player}</span> только что купил автомобиль <span class="item">{item}</span>.</p>' },
+            { icon: '💼', message: '<p>Семья <span class="player">{player}</span> захватила новый бизнес "{item}".</p>' },
+            { icon: '🚓', message: '<p>Полицейский департамент объявил в розыск <span class="player">{player}</span>.</p>' },
+            { icon: '🏠', message: '<p><span class="player">{player}</span> приобрел дом №{number} в Vinewood.</p>' },
+            { icon: '🏆', message: '<p><span class="player">{player}</span> выиграл в лотерею <span class="item">${number}</span>!</p>' }
+        ];
+        const players = ['John_Doe', 'Mike_Hawk', 'Jane_Smith', 'Big_Smoke', 'Sweet_Johnson', 'El_Chapo'];
+        const items = {
+            '🚗': ['Infernus', 'Turismo', 'Sultan RS', 'NRG-500'],
+            '💼': ['24/7', 'Ammunation', 'Cluckin\' Bell', 'Автомастерская'],
+            '🏆': ['50,000', '100,000', '250,000']
+        };
+
+        function getRandomElement(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function generateFeedItem() {
+            const template = getRandomElement(feedTemplates);
+            let message = template.message.replace('{player}', getRandomElement(players));
+            
+            if (message.includes('{item}')) {
+                message = message.replace('{item}', getRandomElement(items[template.icon]));
+            }
+            if (message.includes('{number}')) {
+                const isPrice = template.icon === '🏆';
+                const number = isPrice ? getRandomElement(items['🏆']) : Math.floor(Math.random() * 300) + 1;
+                message = message.replace('{number}', number);
+            }
+            
+            const newItem = document.createElement('li');
+            newItem.className = 'live-feed-item';
+            newItem.innerHTML = `<span class="icon">${template.icon}</span> ${message}`;
+            
+            liveFeedList.prepend(newItem);
+            
+            if (liveFeedList.children.length > 4) {
+                liveFeedList.lastElementChild.remove();
+            }
+        }
+
+        setInterval(generateFeedItem, 4000);
+        for(let i=0; i<4; i++) {
+            generateFeedItem();
+        }
+
     });
     </script>
 </body>
