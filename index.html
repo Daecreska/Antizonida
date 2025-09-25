@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antizona Role Play</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- ОБЩИЕ СТИЛИ И ПЕРЕМЕННЫЕ --- */
+        :root {
+            --font-family: 'Montserrat', sans-serif;
+            --text-color: #ffffff;
+            --text-secondary-color: #aeb1b8;
+            --dark-bg: #121212;
+            --section-bg: #1a1a1a;
+            --header-bg: rgba(18, 18, 18, 0.7);
+            --primary-gradient: linear-gradient(90deg, #FF4B4B, #F42A7F);
+            --input-bg: #2c2c2e;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        a, button {
+            cursor: none;
+        }
+        
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+             text-align: center;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 50px;
+        }
+        
+        /* --- КАСТОМНЫЙ КУРСОР --- */
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s ease-out, width 0.2s ease-out, height 0.2s ease-out;
+        }
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #fff;
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        body.cursor-hover .cursor-outline {
+            transform: translate(-50%, -50%) scale(1.5);
+            background-color: rgba(255, 75, 75, 0.3);
+        }
+        
+        /* --- ПОДСВЕТКА ЗА КУРСОРОМ (SPOTLIGHT) --- */
+        .spotlight {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, rgba(42, 141, 255, 0.1), transparent 25%);
+        }
+
+        /* --- ШАПКА (HEADER) --- */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            transition: background-color 0.3s ease;
+        }
+        
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left, .header-right {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        
+        .main-nav ul {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .main-nav a {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-secondary-color);
+            transition: color 0.2s ease;
+        }
+        
+        .main-nav a:hover, .main-nav a.active {
+            color: var(--text-color);
+        }
+        
+        .btn {
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: none;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .btn-dark { background-color: #2c2c2e; color: var(--text-color); padding: 12px 25px; border-radius: 8px; }
+        .btn-primary { background: var(--primary-gradient); color: var(--text-color); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.9); color: #111; }
+
+        /* --- ГЛАВНЫЙ ЭКРАН С ВИДЕО-ФОНОМ --- */
+        #hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        #bg-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -2;
+            transform: translate(-50%, -50%);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        .hero-content h1 {
+            font-size: 7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-top: 20px;
+            max-width: 600px;
+            color: var(--text-secondary-color);
+        }
+        
+        .hero-buttons {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        /* --- СЕКЦИЯ ЛЕНТЫ СОБЫТИЙ (LIVE FEED) --- */
+        .live-feed-section {
+            padding: 80px 0;
+            background-color: var(--dark-bg);
+        }
+        .live-feed-container {
+            background-color: var(--section-bg);
+            padding: 30px;
+            border-radius: 16px;
+        }
+        .live-feed-container h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .live-feed-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .live-feed-item {
+            background-color: var(--input-bg);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        .live-feed-item .icon { font-size: 1.5rem; }
+        .live-feed-item p .player { font-weight: 700; color: #FF4B4B; }
+        .live-feed-item p .item { font-weight: 700; color: #2A8DFF; }
+
+        /* --- СЕКЦИЯ НОВОСТЕЙ ("WEAZEL NEWS") --- */
+        .news-section {
+            padding: 100px 0;
+        }
+        .news-section .section-title span {
+            font-size: 1rem;
+            color: var(--text-secondary-color);
+            display: block;
+            font-weight: 400;
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            perspective: 1000px;
+        }
+        
+        .news-card {
+            position: relative;
+            height: 400px;
+            border-radius: 16px;
+            overflow: hidden;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 25px;
+            transform-style: preserve-3d;
+            transition: transform 0.4s ease-out;
+        }
+        
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 50%);
+            z-index: 2;
+        }
+        
+        .news-card-bg, .news-card-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.4s ease-out, opacity 0.4s ease;
+            z-index: 1;
+        }
+
+        .news-card-video {
+            object-fit: cover;
+            opacity: 0;
+        }
+        
+        .news-card:hover .news-card-bg {
+            transform: scale(1.05);
+        }
+
+        .news-card:hover .news-card-video {
+            opacity: 1;
+        }
+        
+        .news-card-content {
+            position: relative;
+            z-index: 3;
+            transform: translateZ(20px);
+        }
+        
+        .news-card h3 { font-size: 2rem; margin-bottom: 5px; }
+        .news-card p { color: var(--text-secondary-color); }
+        .news-card .date { font-size: 0.9rem; font-weight: 700; margin-bottom: 10px; }
+        
+        /* --- БЛОК: СТАТУС СЕРВЕРОВ --- */
+        .stats-section {
+            padding: 80px 0;
+            background-color: var(--section-bg);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+        
+        .stat-item h3 {
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .stat-item h3.text-stat {
+             font-size: 2rem;
+             -webkit-text-fill-color: var(--text-color);
+             background: none;
+        }
+        
+        .stat-item p {
+            font-size: 1.1rem;
+            color: var(--text-secondary-color);
+        }
+
+        /* --- СЕКЦИЯ LIVE КАРТЫ --- */
+        .live-map-section {
+            padding: 100px 0;
+        }
+        .live-map-wrapper {
+            display: flex;
+            gap: 40px;
+            background-color: var(--section-bg);
+            padding: 40px;
+            border-radius: 16px;
+        }
+        .map-container {
+            flex: 3;
+            background: url('https://i.imgur.com/8Z4a5Yg.jpeg') no-repeat center center;
+            background-size: cover;
+            border-radius: 12px;
+            min-height: 500px;
+        }
+        .map-legend {
+            flex: 1;
+        }
+        .map-legend h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        .legend-item {
+            margin-bottom: 15px;
+        }
+        .legend-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-item p, .legend-item ul {
+            font-size: 0.9rem;
+            color: var(--text-secondary-color);
+            line-height: 1.6;
+        }
+        .legend-item ul li { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+        .color-box { width: 15px; height: 15px; border-radius: 3px; }
+
+        /* --- ЗАЛ СЛАВЫ --- */
+        .hall-of-fame-section {
+            padding: 80px 0;
+            background-color: var(--dark-bg);
+        }
+        .fame-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .fame-card {
+            background-color: var(--section-bg);
+            padding: 25px;
+            border-radius: 12px;
+        }
+        .fame-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        .fame-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--input-bg);
+            font-size: 0.95rem;
+        }
+        .fame-list li:last-child { border-bottom: none; }
+        .fame-list .player-name { font-weight: 700; }
+        .fame-list .player-value { color: var(--text-secondary-color); }
+
+
+        /* --- БЛОК: ГОРИЗОНТАЛЬНЫЙ СКРОЛЛ --- */
+        .horizontal-scroll-section {
+            padding: 100px 0;
+            overflow: hidden;
+        }
+        
+        .horizontal-scroll-section h2 {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 50px;
+        }
+
+        .horizontal-container {
+            display: flex;
+            gap: 30px;
+            padding: 20px;
+            width: max-content;
+        }
+        
+        .feature-card {
+            width: 400px;
+            flex-shrink: 0;
+            background: var(--section-bg);
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary-color);
+            line-height: 1.6;
+        }
+        .feature-card .btn { margin-top: 20px; }
+
+        /* --- СЕКЦИЯ ЛАУНЧЕРА --- */
+        #launcher {
+            padding: 100px 0;
+            text-align: center;
+            perspective: 1500px;
+        }
+        
+        #launcher h2 { font-size: 3rem; font-weight: 900; }
+        #launcher > p { font-size: 1.2rem; color: var(--text-secondary-color); margin-top: 10px; margin-bottom: 50px; }
+        
+        .launcher-container {
+            background-color: #212124;
+            border-radius: 24px;
+            padding: 50px;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            text-align: left;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.4s ease-out;
+        }
+        
+        .launcher-container::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px;
+            width: calc(100% + 2px);
+            height: calc(100% + 2px);
+            background: linear-gradient(120deg, #F42A7F, #2A8DFF, #F42A7F);
+            background-size: 200% 200%;
+            z-index: -1;
+            border-radius: 25px;
+            animation: gradient-animation 5s ease infinite;
+        }
+        
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .requirements { flex: 1; transform: translateZ(30px); }
+        .requirements h3 { font-size: 2rem; margin-bottom: 30px; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 30px; }
+        .tab-button { background-color: #333; color: var(--text-secondary-color); padding: 10px 20px; border: none; border-radius: 8px; font-weight: 700; transition: all 0.2s ease; }
+        .tab-button.active { background-color: #fff; color: #111; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .requirements-list li { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #333; font-size: 1rem; }
+        .requirements-list li .label { color: var(--text-secondary-color); }
+        .requirements-list li .value { font-weight: 700; }
+        .launcher-image { flex: 1; transform: translateZ(20px); }
+        .launcher-image img { max-width: 100%; transform: rotate(-5deg) scale(1.1); }
+        .download-button-container { text-align: left; margin-top: 40px; }
+
+        /* --- МОДАЛЬНОЕ ОКНО АВТОРИЗАЦИИ --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease-out, visibility 0.3s ease-out; }
+        .modal-overlay.visible { opacity: 1; visibility: visible; }
+        .auth-modal { background-color: var(--section-bg); padding: 40px; border-radius: 16px; width: 100%; max-width: 400px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: scale(0.95) translateY(-20px); transition: transform 0.3s ease-out; }
+        .modal-overlay.visible .auth-modal { transform: scale(1) translateY(0); }
+        .auth-modal .close-btn { position: absolute; top: 15px; right: 15px; font-size: 2rem; color: var(--text-secondary-color); line-height: 1; transition: color 0.2s ease; }
+        .auth-modal .close-btn:hover { color: var(--text-color); }
+        .auth-modal h2 { font-size: 2.5rem; font-weight: 900; text-align: center; margin-bottom: 15px; }
+        .auth-modal .modal-subtitle { text-align: center; color: var(--text-secondary-color); margin-bottom: 25px; font-size: 0.9rem; }
+        .auth-modal .social-login { text-align: center; font-size: 0.9rem; color: var(--text-secondary-color); margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .social-login .vk-icon { font-weight: bold; background-color: #4a76a8; color: white; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 12px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 0.9rem; color: var(--text-secondary-color); margin-bottom: 8px; }
+        .form-group .input-wrapper { position: relative; }
+        .form-group input, .form-group select { width: 100%; padding: 15px; background-color: var(--input-bg); border: 1px solid #333; border-radius: 8px; color: var(--text-color); font-size: 1rem; font-family: var(--font-family); transition: border-color 0.2s ease; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #555; }
+        .form-group .password-toggle { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-secondary-color); }
+        .form-group select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23aeb1b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 15px center; background-size: 1em; padding-right: 40px; }
+        .auth-modal .forgot-password { text-align: center; margin-top: 20px; font-size: 0.9rem; color: var(--text-secondary-color); transition: color 0.2s ease; }
+        .auth-modal .forgot-password:hover { color: var(--text-color); }
+        .btn-rainbow { width: 100%; padding: 18px; font-size: 1.1rem; font-weight: 700; color: white; border: none; border-radius: 8px; background: linear-gradient(90deg, #ff2a2a, #ff7b2a, #f2ff2a, #2aff5e, #2a99ff, #692aff, #ff2aed, #ff2a2a); background-size: 400% 400%; animation: rainbow-animation 8s ease infinite; }
+        
+        @keyframes rainbow-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* --- АНИМАЦИЯ ПОЯВЛЕНИЯ ПРИ СКРОЛЛЕ --- */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        
+        /* --- КНОПКА УПРАВЛЕНИЯ ЗВУКОМ --- */
+        #sound-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--input-bg);
+            border: 1px solid #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0.5;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        #sound-toggle:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* --- ПОДВАЛ --- */
+        #footer { text-align: center; padding: 50px 0; margin-top: 50px; }
+
+        /* --- Адаптивность --- */
+        @media (max-width: 1024px) {
+            .hero-content h1 { font-size: 5rem; }
+            .hero-content p { font-size: 1.2rem; }
+            .launcher-container { flex-direction: column; }
+            .launcher-image img { transform: none; margin-top: 40px; }
+            .cursor-dot, .cursor-outline, .spotlight { display: none; }
+            body, a, button { cursor: auto; }
+            .live-map-wrapper { flex-direction: column; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 3.5rem; }
+            .hero-content p { font-size: 1rem; padding: 0 10px; }
+            .header-left .main-nav { display: none; }
+            .launcher-container { padding: 30px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .fame-grid { grid-template-columns: 1fr; }
+            .section-title { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+    <div class="spotlight"></div>
+    
+    <button id="sound-toggle">
+        <svg id="icon-sound-off" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M9 13.52c.6-.34 1.28-.52 2-.52.72 0 1.4.18 2 .52"></path><path d="M5.8 9.85c1.49-1.33 3.4-2.12 5.42-2.35"></path><path d="M19.38 10.42A10.88 10.88 0 0012 4c-2.3 0-4.43.7-6.22 1.9"></path><path d="M12 20a9 9 0 007.48-13.43"></path><path d="M12 20v-4"></path></svg>
+        <svg id="icon-sound-on" style="display:none;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-4"></path><path d="M12 16a4 4 0 100-8 4 4 0 000 8z"></path><path d="M12 4v2"></path><path d="M19.07 4.93l-1.41 1.41"></path><path d="M4.93 4.93l1.41 1.41"></path><path d="M19.07 19.07l-1.41-1.41"></path><path d="M4.93 19.07l1.41 1.41"></path><path d="M20 12h2"></path><path d="M2 12h2"></path></svg>
+    </button>
+    
+    <audio id="ambient-sound" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
+
+
+    <header class="main-header">
+        <div class="container">
+            <div class="header-left">
+                <a href="#hero" class="logo">
+                    <svg width="48" height="48" viewBox="0 0 132 132" fill="none" xmlns="http://www.w3.org/2000/svg"><g filter="url(#filter0_d_1_2)"><path d="M65.9999 0C82.8939 0 99.1179 6.95356 111.014 18.8492C122.91 30.7449 129.864 46.9689 129.864 63.8629C129.864 80.7569 122.91 96.9809 111.014 108.877C99.1179 120.772 82.8939 127.726 65.9999 127.726C49.1059 127.726 32.8819 120.772 20.9862 108.877C9.09051 96.9809 2.13695 80.7569 2.13695 63.8629C2.13695 46.9689 9.09051 30.7449 20.9862 18.8492C32.8819 6.95356 49.1059 0 65.9999 0Z" fill="url(#paint0_linear_1_2)"/><path d="M57.7371 90.137L31.1371 37.637H39.8371L61.6371 78.437L63.5371 78.437L85.2371 37.637H93.9371L67.3371 90.137H57.7371Z" fill="white"/></g><defs><filter id="filter0_d_1_2" x="0.136948" y="0" width="131.727" height="131.726" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/><feOffset dy="2"/><feGaussianBlur stdDeviation="1"/><feComposite in2="hardAlpha" operator="out"/><feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/><feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_2"/><feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_2" result="shape"/></filter><linearGradient id="paint0_linear_1_2" x1="66" y1="0" x2="66" y2="127.726" gradientUnits="userSpaceOnUse"><stop stop-color="#2A8DFF"/><stop offset="1" stop-color="#0064FF"/></linearGradient></defs></svg>
+                </a>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="#hero" class="active">Главная</a></li>
+                        <li><a href="#">Магазин</a></li>
+                        <li><a href="#">Форум</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="header-right">
+                <a href="#" id="open-modal-btn" class="btn btn-dark">Паспорт штата &rarr;</a>
+                <a href="#launcher" class="btn btn-primary">Начать игру</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Главный экран с видео -->
+        <section id="hero">
+            <div class="hero-overlay"></div>
+            <video autoplay muted loop id="bg-video">
+                <source src="1.mp4" type="video/mp4">
+                Ваш браузер не поддерживает видео тег.
+            </video>
+            <div class="hero-content">
+                <h1 class="reveal">Antizona <br> Role Play</h1>
+                <p class="reveal">Многопользовательская онлайн игра с огромным открытым миром, в котором ты можешь стать кем захочешь!</p>
+                <div class="hero-buttons reveal">
+                    <a href="#launcher" class="btn btn-primary">Начать игру</a>
+                    <button class="btn btn-secondary">Видео об игре &nbsp;▶</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- НОВАЯ СЕКЦИЯ: Лента Игровых Событий -->
+        <section class="live-feed-section">
+            <div class="container">
+                <div class="live-feed-container reveal">
+                    <h3>Прямой эфир из штата</h3>
+                    <ul class="live-feed-list">
+                        <li class="live-feed-item"><span class="icon">🚗</span> <p><span class="player">John_Doe</span> только что купил автомобиль <span class="item">Infernus</span> за $1,500,000.</p></li>
+                        <li class="live-feed-item"><span class="icon">💼</span> <p>Семья <span class="player">Corleone</span> захватила новый бизнес "24/7".</p></li>
+                        <li class="live-feed-item"><span class="icon">🚓</span> <p>Полицейский департамент Las Venturas объявил в розыск <span class="player">Mike_Hawk</span>.</p></li>
+                        <li class="live-feed-item"><span class="icon">🏠</span> <p><span class="player">Jane_Smith</span> приобрела дом №228 в Vinewood.</p></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Секция новостей -->
+        <section class="news-section">
+            <div class="container">
+                 <h2 class="section-title reveal">Antizona Tribune <span>Новостной портал штата</span></h2>
+                <div class="news-grid">
+                    <div class="news-card reveal" data-tilt>
+                        <div class="news-card-bg" style="background-image: url('https://via.placeholder.com/400x500/FF4B4B/FFFFFF?text=Рейд+ФБР');"></div>
+                        <video class="news-card-video" src="https://www.w3schools.com/howto/rain.mp4" muted loop preload="none"></video>
+                        <div class="news-card-content">
+                            <p class="date">24 Сентября 2025</p>
+                            <h3>Громкий рейд ФБР</h3>
+                            <p>Спец. отряд провел операцию по захвату опасного притона.</p>
+                        </div>
+                    </div>
+                    <div class="news-card reveal" data-tilt>
+                        <div class="news-card-bg" style="background-image: url('https://via.placeholder.com/400x500/2A8DFF/FFFFFF?text=Новый+закон');"></div>
+                        <video class="news-card-video" src="https://www.w3schools.com/html/mov_bbb.mp4" muted loop preload="none"></video>
+                        <div class="news-card-content">
+                             <p class="date">22 Сентября 2025</p>
+                            <h3>Новый закон о парковке</h3>
+                            <p>Мэр Лос-Сантоса анонсировал изменения в правилах.</p>
+                        </div>
+                    </div>
+                    <div class="news-card reveal" data-tilt>
+                        <div class="news-card-bg" style="background-image: url('https://via.placeholder.com/400x500/F42A7F/FFFFFF?text=Интервью');"></div>
+                        <video class="news-card-video" src="https://www.w3schools.com/howto/rain.mp4" muted loop preload="none"></video>
+                        <div class="news-card-content">
+                            <p class="date">20 Сентября 2025</p>
+                            <h3>Интервью с шефом LSPD</h3>
+                            <p>Эксклюзивный разговор о борьбе с преступностью.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ОБНОВЛЕННАЯ СЕКЦИЯ: Динамический статус серверов -->
+        <section class="stats-section">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item reveal">
+                        <h3 class="counter" data-target="24512">0</h3>
+                        <p>Игроков онлайн</p>
+                    </div>
+                    <div class="stat-item reveal">
+                        <h3 class="text-stat">15:30, Дождь</h3>
+                        <p>Игровое время и погода</p>
+                    </div>
+                    <div class="stat-item reveal">
+                         <h3 class="text-stat">Gabe_Newell</h3>
+                        <p>Текущий Губернатор</p>
+                    </div>
+                     <div class="stat-item reveal">
+                        <h3 class="counter" data-target="11">0</h3>
+                        <p>Лет вместе с вами</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- НОВАЯ СЕКЦИЯ: Интерактивная Live-карта -->
+        <section class="live-map-section">
+            <div class="container">
+                <h2 class="section-title reveal">Live-Карта Штата</h2>
+                <div class="live-map-wrapper reveal">
+                    <div class="map-container">
+                       <iframe src="https://gta-5-map.com/?embed=light" height="500" style="position: relative; width: 100%;"></iframe>
+                    </div>
+                    <div class="map-legend">
+                        <h3>Легенда карты</h3>
+                        <div class="legend-item">
+                            <h4>🗺️ Война за территории</h4>
+                            <p>Следите за захватом территорий в реальном времени.</p>
+                            <ul>
+                                <li><span class="color-box" style="background-color: #E74C3C;"></span> Grove Street</li>
+                                <li><span class="color-box" style="background-color: #9B59B6;"></span> Ballas</li>
+                                <li><span class="color-box" style="background-color: #3498DB;"></span> Vagos</li>
+                            </ul>
+                        </div>
+                         <div class="legend-item">
+                            <h4>📍 GPS-трекер лидеров</h4>
+                            <p>Местоположение глав гос. фракций во время их смены.</p>
+                        </div>
+                         <div class="legend-item">
+                            <h4>🔥 Тепловая карта</h4>
+                            <p>Отображение "горячих точек", где сейчас больше всего игроков.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- НОВАЯ СЕКЦИЯ: Зал Славы -->
+        <section class="hall-of-fame-section">
+            <div class="container">
+                <h2 class="section-title reveal">Зал Славы</h2>
+                <div class="fame-grid">
+                    <div class="fame-card reveal">
+                        <h3>💰 Самые богатые</h3>
+                        <ul class="fame-list">
+                            <li><span class="player-name">1. Elon_Musk</span> <span class="player-value">$980,1M</span></li>
+                            <li><span class="player-name">2. Jeff_Bezos</span> <span class="player-value">$750,5M</span></li>
+                            <li><span class="player-name">3. Bill_Gates</span> <span class="player-value">$512,8M</span></li>
+                        </ul>
+                    </div>
+                     <div class="fame-card reveal">
+                        <h3>⏳ Ветераны игры</h3>
+                        <ul class="fame-list">
+                            <li><span class="player-name">1. Old_Player</span> <span class="player-value">12050 ч.</span></li>
+                            <li><span class="player-name">2. Admin_Helper</span> <span class="player-value">9800 ч.</span></li>
+                            <li><span class="player-name">3. Lucky_Guy</span> <span class="player-value">8540 ч.</span></li>
+                        </ul>
+                    </div>
+                     <div class="fame-card reveal">
+                        <h3>👮 Лучший полицейский</h3>
+                        <ul class="fame-list">
+                            <li><span class="player-name">1. Officer_Johns</span> <span class="player-value">152 ареста</span></li>
+                            <li><span class="player-name">2. Cop_Freeman</span> <span class="player-value">131 арест</span></li>
+                            <li><span class="player-name">3. Good_Police</span> <span class="player-value">119 арестов</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ОБНОВЛЕННАЯ СЕКЦИЯ: Горизонтальный скролл с новыми фишками -->
+        <section class="horizontal-scroll-section" id="features">
+             <h2 class="reveal">Вселенная AntiZona RP</h2>
+             <div class="horizontal-container-wrapper">
+                 <div class="horizontal-container">
+                    <div class="feature-card reveal"><h3>📜 Паспорт Штата</h3><p>У каждого игрока есть публичный профиль с достижениями, имуществом и RP-статусом. Покажите всем, кто вы есть!</p></div>
+                    <div class="feature-card reveal"><h3>🏛️ Вступайте во фракции</h3><p>Полиция, ФБР, больницы, банды и мафии. У каждой фракции своя история, лидер и цели. Подайте заявление на вступление прямо с сайта!</p><a href="#" class="btn btn-dark">Подробнее</a></div>
+                    <div class="feature-card reveal"><h3>🛠️ Калькулятор Тюнинга</h3><p>Выберите машину, подберите детали тюнинга (Stage 1-3, визуал) и рассчитайте итоговую стоимость, не заходя в игру.</p><a href="#" class="btn btn-dark">Перейти</a></div>
+                    <div class="feature-card reveal"><h3>🛒 Онлайн-Рынок</h3><p>Просматривайте объявления о продаже машин, домов и бизнесов от других игроков. Найдите лучшее предложение и свяжитесь с продавцом в игре!</p><a href="#" class="btn btn-dark">На рынок</a></div>
+                    <div class="feature-card reveal"><h3>✨ Постоянные обновления</h3><p>Мы регулярно добавляем в игру новый контент: события, машины, одежду и игровые механики, чтобы вам никогда не было скучно.</p></div>
+                 </div>
+             </div>
+        </section>
+
+
+        <!-- Секция лаунчера -->
+        <section id="launcher" class="launcher-section">
+            <div class="container">
+                <h2 class="reveal">Установи наш лаунчер</h2>
+                <p class="reveal">Скачать SAMP можно бесплатно для Windows и Android</p>
+                
+                <div class="launcher-container reveal" data-tilt>
+                    <div class="requirements">
+                        <h3>Системные требования</h3>
+                        <div class="tabs">
+                            <button class="tab-button active" data-tab="windows">Windows</button>
+                            <button class="tab-button" data-tab="android">Android</button>
+                        </div>
+                        
+                        <div id="windows" class="tab-content active">
+                            <ul class="requirements-list">
+                                <li><span class="label">ОС</span> <span class="value">Windows 10 - Windows 11 (64 бит)</span></li>
+                                <li><span class="label">Процессор</span> <span class="value">Intel Core i5-6600K / AMD FX-6300</span></li>
+                                <li><span class="label">Оперативная память</span> <span class="value">6 ГБ</span></li>
+                                <li><span class="label">Видеокарта</span> <span class="value">От 2 ГБ видеопамяти</span></li>
+                                <li><span class="label">Место на диске</span> <span class="value">12 ГБ</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div id="android" class="tab-content">
+                            <ul class="requirements-list">
+                                <li><span class="label">ОС</span> <span class="value">Android 9.0+</span></li>
+                                <li><span class="label">Процессор</span> <span class="value">Snapdragon 665 / Kirin 710</span></li>
+                                <li><span class="label">Оперативная память</span> <span class="value">4 ГБ</span></li>
+                                <li><span class="label">Видеоускоритель</span> <span class="value">Adreno 610 / Mali-G51</span></li>
+                                <li><span class="label">Место на диске</span> <span class="value">5 ГБ</span></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="download-button-container">
+                            <a href="#" class="btn btn-primary">Скачать игру</a>
+                        </div>
+                    </div>
+                    
+                    <div class="launcher-image">
+                        <img style="margin-left: -50px; transform: rotate(20);" src="ноуты-Photoroom.png" alt="Игровой ноутбук". width="1200">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer">
+        <p>&copy; 2025 AntiZona Role Play. Все права защищены.</p>
+    </footer>
+
+    <!-- Модальное окно -->
+    <div class="modal-overlay" id="auth-modal-overlay">
+        <div class="auth-modal">
+            <span class="close-btn" id="close-modal-btn">&times;</span>
+            <h2>Паспорт штата</h2>
+            <p class="modal-subtitle">Войдите в свой игровой аккаунт, чтобы просмотреть профиль.</p>
+            <p class="social-login">Авторизация через <span class="vk-icon">VK</span></p>
+            <form onsubmit="event.preventDefault();">
+                <div class="form-group"><label for="nickname">Ник</label><input type="text" id="nickname" placeholder="Игровой ник"></div>
+                <div class="form-group"><label for="password">Пароль</label><div class="input-wrapper"><input type="password" id="password" placeholder="Игровой пароль"><span class="password-toggle">👁</span></div></div>
+                <div class="form-group"><label for="server">Сервер</label><select id="server"><option value="phoenix" selected>Phoenix</option><option value="tucson">Tucson</option><option value="scottdale">Scottdale</option></select></div>
+                <button type="submit" class="btn-rainbow">Войти</button>
+                <a href="#" class="forgot-password">Забыли пароль?</a>
+            </form>
+        </div>
+    </div>
+    
+    <!-- GSAP для плавных анимаций -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // --- 1. ЛОГИКА КАСТОМНОГО КУРСОРА И ПОДСВЕТКИ ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        const spotlight = document.querySelector('.spotlight');
+
+        gsap.set(cursorDot, {xPercent: -50, yPercent: -50});
+        gsap.set(cursorOutline, {xPercent: -50, yPercent: -50});
+        
+        window.addEventListener('mousemove', e => {
+            gsap.to(cursorDot, 0.2, {x: e.clientX, y: e.clientY});
+            gsap.to(cursorOutline, 0.6, {x: e.clientX, y: e.clientY});
+            gsap.to(spotlight, 0.6, {
+                background: `radial-gradient(circle at ${e.clientX}px ${e.clientY}px, rgba(42, 141, 255, 0.1), transparent 25%)`
+            });
+        });
+        
+        document.querySelectorAll('a, button, .news-card, .tab-button').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
+
+        // --- 2. ЭФФЕКТ ПАРАЛЛАКСА НА ВИДЕО-ФОНЕ ---
+        const parallaxVideo = document.getElementById('bg-video');
+        window.addEventListener('scroll', () => {
+            const offset = window.pageYOffset;
+            if (parallaxVideo) {
+                // Двигаем видео медленнее, чем скролл, для создания глубины
+                parallaxVideo.style.transform = `translate(-50%, calc(-50% + ${offset * 0.3}px))`;
+            }
+        });
+
+        // --- 3. 3D-ЭФФЕКТ НАКЛОНА (TILT) ПРИ НАВЕДЕНИИ ---
+        document.querySelectorAll('[data-tilt]').forEach(el => {
+            el.addEventListener('mousemove', e => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -5;
+                const rotateY = ((x - centerX) / centerX) * 5;
+                el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            });
+
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+            });
+        });
+        
+        // --- 4. ЛОГИКА ДЛЯ СИНЕМАТИК-ПРЕВЬЮ НА КАРТОЧКАХ ---
+        document.querySelectorAll('.news-card').forEach(card => {
+            const video = card.querySelector('.news-card-video');
+            if(video) {
+                card.addEventListener('mouseenter', () => video.play());
+                card.addEventListener('mouseleave', () => {
+                    video.pause();
+                    video.currentTime = 0;
+                });
+            }
+        });
+        
+        // --- 5. ЛОГИКА ДЛЯ ГОРИЗОНТАЛЬНОГО СКРОЛЛА ---
+        const scrollContainer = document.querySelector('.horizontal-container');
+        const scrollWrapper = document.querySelector('.horizontal-scroll-section');
+        if(scrollContainer && scrollWrapper) {
+            scrollWrapper.addEventListener('wheel', (evt) => {
+                // Проверяем, есть ли горизонтальный скролл
+                if (Math.abs(evt.deltaY) > Math.abs(evt.deltaX)) {
+                    if (scrollContainer.scrollWidth > scrollContainer.clientWidth) {
+                        evt.preventDefault();
+                        scrollContainer.scrollLeft += evt.deltaY;
+                    }
+                }
+            }, { passive: false });
+        }
+        
+        // --- 6. ЗВУКОВОЕ СОПРОВОЖДЕНИЕ ---
+        const soundToggle = document.getElementById('sound-toggle');
+        const ambientSound = document.getElementById('ambient-sound');
+        const iconOn = document.getElementById('icon-sound-on');
+        const iconOff = document.getElementById('icon-sound-off');
+        let isSoundOn = false;
+
+        soundToggle.addEventListener('click', () => {
+            isSoundOn = !isSoundOn;
+            if (isSoundOn) {
+                ambientSound.play().catch(e => console.log("Autoplay blocked"));
+                iconOn.style.display = 'block';
+                iconOff.style.display = 'none';
+            } else {
+                ambientSound.pause();
+                iconOn.style.display = 'none';
+                iconOff.style.display = 'block';
+            }
+        });
+
+        const hoverSound = new Audio('https://cdn.pixabay.com/audio/2021/08/04/audio_bb630cc098.mp3');
+        const clickSound = new Audio('https://cdn.pixabay.com/audio/2022/03/15/audio_24933a2862.mp3');
+        hoverSound.volume = 0.2;
+        clickSound.volume = 0.3;
+
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => { if(isSoundOn) hoverSound.play().catch(e => {}); });
+            el.addEventListener('click', () => { if(isSoundOn) clickSound.play().catch(e => {}); });
+        });
+        
+        // --- 7. "ПАСХАЛКА" (EASTER EGG) - KONAMI CODE ---
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        let konamiIndex = 0;
+        document.addEventListener('keydown', e => {
+            if (e.key.toLowerCase() === konamiCode[konamiIndex].toLowerCase()) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    alert('Konami Code Activated! 🎉');
+                    document.querySelector('.logo').style.transition = 'transform 2s';
+                    document.querySelector('.logo').style.transform = 'rotate(3600deg)';
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
+        });
+
+        // --- 8. Базовая логика (табы, модальное окно, анимация скролла) ---
+        // Табы
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const parent = button.closest('.requirements');
+                const targetTabId = button.dataset.tab;
+                parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                parent.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                parent.querySelector(`#${targetTabId}`).classList.add('active');
+                button.classList.add('active');
+            });
+        });
+        
+        // Модальное окно
+        const openModalBtn = document.getElementById('open-modal-btn');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modalOverlay = document.getElementById('auth-modal-overlay');
+        openModalBtn.addEventListener('click', e => { e.preventDefault(); modalOverlay.classList.add('visible'); });
+        closeModalBtn.addEventListener('click', () => modalOverlay.classList.remove('visible'));
+        modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) modalOverlay.classList.remove('visible'); });
+        
+        // Анимация при прокрутке + ДИНАМИЧЕСКИЕ СЧЕТЧИКИ
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    if (entry.target.classList.contains('counter')) {
+                        const target = +entry.target.getAttribute('data-target');
+                        const startValue = { val: 0 };
+                        
+                        gsap.to(startValue, {
+                            duration: 2.5,
+                            val: target,
+                            roundProps: "val",
+                            onUpdate: () => {
+                                entry.target.innerText = startValue.val.toLocaleString('en-US');
+                            },
+                            ease: "power2.out"
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal, .counter').forEach(el => observer.observe(el));
+    });
+    </script>
+</body>
+</html>
